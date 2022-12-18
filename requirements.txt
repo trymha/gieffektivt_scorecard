@@ -1,6 +1,0 @@
-dash
-numpy
-gunicorn
-dash_bootstrap_components
-datetime
-plotly
