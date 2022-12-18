@@ -4,7 +4,7 @@ import dash_bootstrap_components as dbc
 from histogram_plot import *
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
-
+server = app.server
 
 #month_marks = {i: ts.month_name()[:3] + ' ' + str(ts.year) for i,ts in enumerate(timestamps)}
 showlabel_months = ['January','April','July','October']
