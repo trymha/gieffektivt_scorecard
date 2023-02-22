@@ -89,7 +89,7 @@ def get_barplot(month_index_range):
     #[fig.add_hline(y=y_tick) for y_tick in 
     fig.update_layout(
         dict(
-            plot_bgcolor='rgba(0, 0, 0, 0)',
+            plot_bgcolor='#fafafa',
             yaxis=dict(
                 showgrid=True,
                 gridcolor='White'
