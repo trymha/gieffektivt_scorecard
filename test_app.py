@@ -32,7 +32,7 @@ year_slider = dcc.RangeSlider(
         marks=None,
         #vertical=True, verticalHeight=700,
         #tooltip={"placement": "bottom", "always_visible": True},
-        )#className='slider'),
+        )#className='rc-slider'),
 
 histogram_graph = dcc.Graph(id='histogram-graph', style={"width": "100%"})
 bar_graph = dcc.Graph(id='bar-graph', style={"width": "100%"})
@@ -46,14 +46,14 @@ app.layout = dbc.Container([
         #dbc.Col(bar_graph, width={"size": 6},style = {'background-color':'cyan'}),
         #dbc.Col([year_slider], style={'width':'30%'}),
         dbc.Col(html.Span('2019', id='from-year'), width='auto'),
-        dbc.Col(year_slider, width=10),
+        dbc.Col(year_slider, width=9),
         dbc.Col(html.Span('2021', id='to-year'), width='auto'),
         #dbc.Col([dcc.RangeSlider(0, 20, marks=None, value=[5, 15])], style={'width':'30%'})
     ]), #style = {"height": "100%", 'background-color':'yellow'}), 
     dbc.Row(dbc.Col(histogram_graph)),
     # dbc.Row(year_slider), 
     html.Br(),
-    ]
+    ], style={'backgroundColor':'#fafafa'}
 )
 
 @app.callback(
