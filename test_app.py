@@ -6,11 +6,11 @@ import histogram_plot as hp
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
 
-#month_marks = {i: ts.month_name()[:3] + ' ' + str(ts.year) for i,ts in enumerate(timestamps)}
+month_marks = {i: ts.month_name()[:3] + ' ' + str(ts.year) for i,ts in enumerate(hp.MDs['timestamp'])}
 showlabel_months = ['January','April','July','October']
-month_marks = {i: {
-    'label':ts.month_name()[:3] + '\n' +  str(ts.year),
-    'style': {'white-space':'nowrap','writing-mode': 'vertical-rl'}} for i,ts in enumerate(hp.MDs['timestamp'])}
+# month_marks = {i: {
+#     'label':ts.month_name()[:3] + '\n' +  str(ts.year),
+#     'style': {'white-space':'nowrap','writing-mode': 'vertical-rl'}} for i,ts in enumerate(hp.MDs['timestamp'])}
     #'style': {'white-space':'nowrap'}} for i,ts in enumerate(MDs['timestamp'])}
 #month_marks = {i: '''a<br>a''' for i,ts in enumerate(MDs['timestamp'])}
 time_options = ['Week','Year','Quarter','Month']
@@ -18,9 +18,13 @@ time_dd = dcc.Dropdown(id='time-dd',value=time_options[0],options=[{'label':to,'
 
 month_slider = dcc.RangeSlider(
         id='month-slider', 
-        marks=month_marks, 
-        value=[0,len(month_marks)-1], step=None, min=0, max=len(month_marks),
-        allowCross= False, pushable=6, #Minimum 6 months range
+        #marks=month_marks,
+        marks=None, 
+        value=[0,len(month_marks)-1],
+        step=1,
+        min=0,
+        max=len(month_marks),
+        allowCross= False, #pushable=6, #Minimum 6 months range
         #vertical=True, verticalHeight=700,
         #tooltip={"placement": "bottom", "always_visible": True},
         className='slider'),
@@ -42,36 +46,43 @@ app.layout = html.Div([
     #dcc.Slider(id='bins-slider', value=100, min=20, max=500, step=10, className='slider'),
     html.Br(),
     dbc.Row([
-       # dbc.Col(histogram_graph, width={"size": 6},style = {'background-color':'cyan'}),
-        #dbc.Col(bar_graph, width={"size": 6},style = {'background-color':'cyan'}),
-        #dbc.Col([year_slider], style={'width':'30%'}),
-        dbc.Col(html.Span('2019', id='from-year'), width='auto'),
-        dbc.Col(year_slider, width=9),
-        dbc.Col(html.Span('2021', id='to-year'), width='auto'),
+        # dbc.Col(html.Span('2019', id='from-year'), width='auto'),
+        # dbc.Col(year_slider, width=9),
+        # dbc.Col(html.Span('2021', id='to-year'), width='auto'),
+        dbc.Col(html.Span(month_marks[0], id='from-month'), width='auto'),
+        dbc.Col(month_slider, width=9),
+        dbc.Col(html.Span(month_marks[len(month_marks)-1], id='to-month'), width='auto'),
         #dbc.Col([dcc.RangeSlider(0, 20, marks=None, value=[5, 15])], style={'width':'30%'})
     ]), #style = {"height": "100%", 'background-color':'yellow'}), 
     dbc.Row(dbc.Col(histogram_graph)),
-    # dbc.Row(year_slider), 
-    html.Br(),
     ], style={'backgroundColor':'#fafafa'}
 )
 
 @app.callback(
     Output('histogram-graph','figure'),
-    Input('year-slider','value'),
+    #Input('year-slider','value'),
+    Input('month-slider','value'),
     prevent_inital_callback=True
 )
-def update_histogram(year_range):
-    index_range = [(year - 2018)*12 for year in year_range]
-    return hp.get_histogram(index_range)
+def update_histogram(month_index_range):
+    #index_range = [(year - 2018)*12 for year in year_range]
+    return hp.get_histogram(month_index_range)
+
+# @app.callback(
+#     Output('from-year','children'),
+#     Output('to-year','children'),
+#     Input('year-slider','value')
+# )
+# def update_year_text(year_range):
+#     return str(year_range[0]), str(year_range[1])
 
 @app.callback(
-    Output('from-year','children'),
-    Output('to-year','children'),
-    Input('year-slider','value')
+    Output('from-month','children'),
+    Output('to-month','children'),
+    Input('month-slider','value')
 )
-def update_year_text(year_range):
-    return str(year_range[0]), str(year_range[1])
+def update_month_text(month_range):
+    return month_marks[month_range[0]], month_marks[month_range[1]]
 
 # @app.callback(
 #     Output('bar-graph','figure'),
