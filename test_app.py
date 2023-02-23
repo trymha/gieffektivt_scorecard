@@ -1,7 +1,7 @@
 from dash import Dash, html, dcc, Output, Input
 import dash_bootstrap_components as dbc
 #from organization_plots import *
-from histogram_plot import *
+import histogram_plot as hp
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
@@ -10,7 +10,7 @@ server = app.server
 showlabel_months = ['January','April','July','October']
 month_marks = {i: {
     'label':ts.month_name()[:3] + '\n' +  str(ts.year),
-    'style': {'white-space':'nowrap','writing-mode': 'vertical-rl'}} for i,ts in enumerate(MDs['timestamp'])}
+    'style': {'white-space':'nowrap','writing-mode': 'vertical-rl'}} for i,ts in enumerate(hp.MDs['timestamp'])}
     #'style': {'white-space':'nowrap'}} for i,ts in enumerate(MDs['timestamp'])}
 #month_marks = {i: '''a<br>a''' for i,ts in enumerate(MDs['timestamp'])}
 time_options = ['Week','Year','Quarter','Month']
@@ -37,7 +37,7 @@ year_slider = dcc.RangeSlider(
 histogram_graph = dcc.Graph(id='histogram-graph', style={"width": "100%"})
 bar_graph = dcc.Graph(id='bar-graph', style={"width": "100%"})
 
-app.layout = dbc.Container([
+app.layout = html.Div([
     #time_dd,
     #dcc.Slider(id='bins-slider', value=100, min=20, max=500, step=10, className='slider'),
     html.Br(),
@@ -63,7 +63,7 @@ app.layout = dbc.Container([
 )
 def update_histogram(year_range):
     index_range = [(year - 2018)*12 for year in year_range]
-    return get_histogram(index_range)
+    return hp.get_histogram(index_range)
 
 @app.callback(
     Output('from-year','children'),

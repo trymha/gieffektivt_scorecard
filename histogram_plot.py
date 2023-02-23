@@ -37,7 +37,9 @@ def get_histogram(month_index_range, n_bins=100):
     )
     fig.update_layout(
         xaxis = dict(title=dict(text='Donasjonsmenge [NOK]'), fixedrange=True),
-        yaxis = dict(type='log', title=dict(text='Prosent av donasjoner [%]'), fixedrange=True)
+        yaxis = dict(type='log', title=dict(text='Prosent av donasjoner [%]'), fixedrange=True),
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
     )
     return fig
 
@@ -89,7 +91,8 @@ def get_barplot(month_index_range):
     #[fig.add_hline(y=y_tick) for y_tick in 
     fig.update_layout(
         dict(
-            plot_bgcolor='#fafafa',
+            paper_bgcolor='rgba(0,0,0,0)',
+            plot_bgcolor='rgba(0,0,0,0)',
             yaxis=dict(
                 showgrid=True,
                 gridcolor='White'
