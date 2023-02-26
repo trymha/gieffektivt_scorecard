@@ -8,11 +8,7 @@ server = app.server
 
 month_marks = {i: ts.month_name()[:3] + ' ' + str(ts.year) for i,ts in enumerate(hp.MDs['timestamp'])}
 showlabel_months = ['January','April','July','October']
-# month_marks = {i: {
-#     'label':ts.month_name()[:3] + '\n' +  str(ts.year),
-#     'style': {'white-space':'nowrap','writing-mode': 'vertical-rl'}} for i,ts in enumerate(hp.MDs['timestamp'])}
-    #'style': {'white-space':'nowrap'}} for i,ts in enumerate(MDs['timestamp'])}
-#month_marks = {i: '''a<br>a''' for i,ts in enumerate(MDs['timestamp'])}
+
 time_options = ['Week','Year','Quarter','Month']
 time_dd = dcc.Dropdown(id='time-dd',value=time_options[0],options=[{'label':to,'value':to} for to in time_options])
 
@@ -23,8 +19,8 @@ month_slider = dcc.RangeSlider(
         value=[0,len(month_marks)-1],
         step=1,
         min=0,
-        max=len(month_marks),
-        allowCross= False, #pushable=6, #Minimum 6 months range
+        max=len(month_marks)-1,
+        allowCross= False, pushable=6, #Minimum 6 months range
         #vertical=True, verticalHeight=700,
         #tooltip={"placement": "bottom", "always_visible": True},
         className='slider'),
@@ -93,4 +89,4 @@ def update_month_text(month_range):
 #     return get_barplot(index_range)
 
 if __name__ == '__main__':
-    app.run_server(debug=False)
+    app.run_server(debug=True)

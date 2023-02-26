@@ -35,11 +35,24 @@ def get_histogram(month_index_range, n_bins=100):
     fig.add_trace(
         go.Histogram(x=donations, nbinsx=n_bins, marker_color='black', histnorm='percent', hovertemplate=hvr_tmpl)
     )
+    #horline_values = [10**n for n in range(-1,3)]
+    tickline_values = np.logspace(-3,3,7)
+    horline_values = np.outer(tickline_values,np.arange(1,10,1)).flatten()
+    #horline_values = [0.01, 0.05, 0.1, 0.5, 1.0, 5.0, 10.0, 50.0, 100.0]
+    [fig.add_hline(y=hlv, line_color='#fafafa', line_width=0.5) for hlv in horline_values]
     fig.update_layout(
         xaxis = dict(title=dict(text='Donasjonsmenge [NOK]'), fixedrange=True),
-        yaxis = dict(type='log', title=dict(text='Prosent av donasjoner [%]'), fixedrange=True),
+        yaxis = dict(
+            type='log',
+            title=dict(text='Prosent av donasjoner [%]'),
+            fixedrange=True, #Disabling zoom
+            gridcolor='#fafafa',
+            tickvals = tickline_values,
+            range = [-3,2]),
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
+        margin=dict(l=0, r=0, t=0, b=0),
+        bargap=0.05
     )
     return fig
 
