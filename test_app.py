@@ -89,4 +89,4 @@ def update_month_text(month_range):
 #     return get_barplot(index_range)
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=False)
