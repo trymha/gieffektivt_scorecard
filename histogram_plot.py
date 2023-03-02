@@ -36,19 +36,24 @@ def get_histogram(month_index_range, n_bins=100):
         go.Histogram(x=donations, nbinsx=n_bins, marker_color='black', histnorm='percent', hovertemplate=hvr_tmpl)
     )
     #horline_values = [10**n for n in range(-1,3)]
-    tickline_values = np.logspace(-3,3,7)
-    horline_values = np.outer(tickline_values,np.arange(1,10,1)).flatten()
-    #horline_values = [0.01, 0.05, 0.1, 0.5, 1.0, 5.0, 10.0, 50.0, 100.0]
-    [fig.add_hline(y=hlv, line_color='#fafafa', line_width=0.5) for hlv in horline_values]
+    major_ticks = np.logspace(-3,3,7)
+    all_ticks = np.outer(major_ticks,np.arange(1,10,1)).flatten()
+    horline_values_major = [0.01, 0.1, 1.0, 10.0, 100.0]
+    [fig.add_hline(y=hlv, line_color='#fafafa', line_width=0.5) for hlv in horline_values_major]
     fig.update_layout(
         xaxis = dict(title=dict(text='Donasjonsmenge [NOK]'), fixedrange=True),
         yaxis = dict(
             type='log',
             title=dict(text='Prosent av donasjoner [%]'),
             fixedrange=True, #Disabling zoom
-            gridcolor='#fafafa',
-            tickvals = tickline_values,
-            range = [-3,2]),
+            #gridcolor='black',
+            ticks = 'outside',
+            tickvals = all_ticks,
+            ticktext = [val if val in major_ticks else '' for val in all_ticks],
+            range = [-3,2],
+            showgrid=False
+            #minor = dict(ticks='outside', dtick=0, tick0=-2, showgrid=True)
+            ),
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
         margin=dict(l=0, r=0, t=0, b=0),
@@ -114,3 +119,22 @@ def get_barplot(month_index_range):
     )
     #fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor='LightPink')
     return fig
+
+def histogram_timing():
+    fig = get_histogram([0,5])
+
+# TIMING CODE #
+time_code = False
+sort_type = 'cumtime'
+if time_code:
+    import cProfile
+    import pstats
+    from pstats import SortKey
+    # profiler = cProfile.Profile()
+    # profiler.runcall(histogram_timing)
+    # profiler.print_stats()
+    cProfile.run('histogram_timing()','output.dat')
+    with open('output.txt','w') as f:
+        p=pstats.Stats('output.dat', stream=f)
+        p.sort_stats(sort_type).print_stats()
+
